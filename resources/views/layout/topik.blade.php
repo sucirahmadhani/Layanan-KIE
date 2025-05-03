@@ -9,9 +9,9 @@
     </div>    
 
     <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border border-gray-200 rounded-lg">
-            <thead>
-                <tr class="bg-gray-400">
+        <table class="min-w-full border-collapse text-left">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-400">
+                <tr>
                     <th class="px-5 py-3 text-left text-sm font-bold text-gray-900 tracking-wide">Judul</th>
                     <th class="px-5 py-3 text-center text-sm font-bold text-gray-900 tracking-wide">Tahun</th>
                     <th class="px-5 py-3 text-center text-sm font-bold text-gray-900 tracking-wide">Soal</th>
@@ -24,7 +24,7 @@
                     <td class="px-5 py-3">{{ $topik->judul }}</td>
                     <td class="px-5 py-3 text-center">{{ $topik->tahun }}</td>
                     <td class="px-5 py-3 text-center">
-                        <a href="#" class="bg-green-500 text-white px-3 py-1 rounded-md text-sm hover:bg-green-600 items-center">
+                        <a href="{{ route('soal.show', $topik->id) }}" class="bg-green-500 text-white px-3 py-1 rounded-md text-sm hover:bg-green-600 items-center">
                             LIHAT
                         </a>
                     </td>

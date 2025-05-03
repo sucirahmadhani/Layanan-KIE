@@ -35,7 +35,6 @@
         </header>
         <div class="container container-normal  ">
             <div class="row align-items-center g-4">
-                <!-- Tulisan di sebelah kiri -->
                 <div class="col-lg d-none d-lg-block">
                     <div class="d-flex align-items-center justify-content-center h-150">
                       <div class="text-left">
@@ -65,7 +64,7 @@
                         @csrf
                           <div class="mb-5">
                             <label class="form-label text-white">Username</label>
-                            <input type="username" name="username" class="form-control" autocomplete="off" />
+                            <input type="username" name="username" class="form-control" autocomplete="off" required/>
                           </div>
                           <div class="mb-2">
                             <label class="form-label text-white">
@@ -84,6 +83,9 @@
                                   id="togglePassword">
                                 </i>
                             </div>
+                            <p class="mt-2 mb-2 text-right">
+                                <a href="/forgot-password" class="font-semibold text-sm/2 text-green-500 hover:text-green-400">Lupa Password?</a>
+                            </p>
                           </div>
                           <div class="mb-2">
                             <div class="flex">
@@ -99,6 +101,17 @@
                     </div>
                   </div>
                 </div>
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if ($errors->has('login'))
+                    <div class="alert alert-danger">
+                        {{ $errors->first('login') }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>

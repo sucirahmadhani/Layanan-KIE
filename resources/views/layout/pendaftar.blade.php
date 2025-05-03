@@ -7,6 +7,9 @@
   <title>@yield('title', 'Layanan KIE - BBPOM di Padang')</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
   <style>
@@ -24,12 +27,12 @@
               <img class="w-24 m-4" src="/img/logo.png" alt="BPOM Logo">
             </div>
             <div class="hidden md:block">
-              <div class="ml-10 flex items-baseline space-x-4">
-                <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-white" aria-current="page">Beranda</a>
-                <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">Layanan</a>
-                <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">Daftar</a>
-                <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">Riwayat</a>
-              </div>
+                <div class="ml-10 flex items-baseline space-x-4">
+                  <a href="/home" class="rounded-md px-3 py-2 text-sm font-medium {{ Request::is('home') ?  'text-white' : 'text-gray-300' }} hover:bg-blue-700 hover:text-white">Beranda</a>
+                  <a href="/proses" class="rounded-md px-3 py-2 text-sm font-medium {{ Request::is('proses') ? ' text-white' : 'text-gray-300' }} hover:bg-blue-700 hover:text-white">Proses</a>
+                  <a href="/daftar" class="rounded-md px-3 py-2 text-sm font-medium {{ Request::is('daftar') ? 'text-white' : 'text-gray-300' }} hover:bg-blue-700 hover:text-white">Daftar</a>
+                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium {{ Request::is('riwayat') ?  'text-white' : 'text-gray-300' }} hover:bg-blue-700 hover:text-white">Riwayat</a>
+                </div>
             </div>
           </div>
           <div class="hidden md:block">
@@ -40,7 +43,7 @@
                   <img class="size-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
                 </button>
                 <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
-                  <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+                  <a href="/profil" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
                   <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-red-100">Logout</button>
@@ -72,19 +75,14 @@
         <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
           <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
           <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-white" aria-current="page">Home</a>
-          <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-blue-700 hover:text-white">Layanan</a>
+          <a href="/proses" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-blue-700 hover:text-white">Proses</a>
           <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-blue-700 hover:text-white">Daftar</a>
           <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-blue-700 hover:text-white">Riwayat</a>
-          <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-blue-700 hover:text-white">Reports</a>
         </div>
         <div class="border-t border-blue-700 pt-4 pb-3">
           <div class="flex items-center px-5">
             <div class="shrink-0">
               <img class="size-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-            </div>
-            <div class="ml-3">
-              <div class="text-base/5 font-medium text-white">Tom Cook</div>
-              <div class="text-sm font-medium text-gray-400">tom@example.com</div>
             </div>
           </div>
 
@@ -92,12 +90,13 @@
       </div>
     </nav>
 
-    
+
     <main>
         @yield('content')
     </main>
 
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
   </body>
   </html>

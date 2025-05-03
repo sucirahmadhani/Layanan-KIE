@@ -24,7 +24,6 @@
 </head>
 
 <body class="d-flex flex-column bg-white">
-
     <div class="page">
         <header class="navbar navbar-expand-md d-print-none shadow-none mt-5 " >
             <div class="container-xl">
@@ -67,7 +66,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label text-white">Email</label>
-                        <input type="email" name="email" class="form-control" placeholder="Masukkan enail anda">
+                        <input type="email" name="email" class="form-control" placeholder="Masukkan email anda">
                     </div>
                     <div class="mb-2">
                         <div class="flex">
@@ -82,10 +81,17 @@
             </form>
 
         </div>
+        @if (session('success'))
+            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
+                <span class="font-medium">{{ session('success') }}</span>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+                <span class="font-medium">{{ $errors->first() }}</span>
+        @endif
     </div>
-
-
-
 @include('auth.footer')
 <script src="./dist/js/tabler.min.js?1738096682" defer></script>
 <script src="./dist/js/demo.min.js?1738096682" defer></script>

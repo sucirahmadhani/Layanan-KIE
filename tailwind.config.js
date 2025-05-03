@@ -10,6 +10,7 @@ export default {
         './resources/**/*.vue',
         './node_modules/@tabler/core/dist/js/**/*.js', 
     ],
+    darkMode: false,
     theme: {
         extend: {
             fontFamily: {

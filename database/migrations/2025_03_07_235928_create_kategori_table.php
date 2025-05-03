@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('peserta', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama');
-            $table->string('username')->unique();
-            $table->string('password');
-            $table->string('email');
+        Schema::create('kategori', function (Blueprint $table) {
+            $table->string('id', 10)->primary(); 
+            $table->string('nama', 50)->unique();
             $table->timestamps();
         });
-
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('peserta');
+        Schema::dropIfExists('kategori');
     }
 };
