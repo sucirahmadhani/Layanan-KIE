@@ -9,7 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TesController;
 use Illuminate\Http\Request;
-
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/login', [LoginController::class, 'loginpage'])->name('login');
 Route::get('/register', [LoginController::class, 'registerpage']);
@@ -35,8 +35,8 @@ Route::post('/verify-email/send', [LoginController::class, 'sendVerificationEmai
 Route::middleware(['auth'])->group(function () {
 
     // Route untuk dashboard
-    Route::get('/dashboard', [LoginController::class, 'adminDashboard'])->name('admin.dashboard');
-    Route::get('/home', [LoginController::class, 'pendaftarDashboard'])->name('pendaftar.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/home', [DashboardController::class, 'home'])->name('pendaftar.dashboard');
     Route::get('/beranda', [DashboardController::class, 'beranda'])->name('peserta.dashboard');
 
     // Route untuk topik
@@ -95,7 +95,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/survey', [TesController::class, 'submitSurvey'])->name('survey.submit');
     Route::get('/sertifikat/{layananId}', [TesController::class, 'generate'])->name('sertifikat.generate');
 
-
+    // Route untuk riwayat
+    Route::get('/riwayat', [LayananController::class, 'riwayat'])->name('riwayat');
+    Route::get('/riwayat/{id}', [LayananController::class, 'detail_riwayat'])->name('riwayat.detail');
 });
 
 // Route untuk reset password

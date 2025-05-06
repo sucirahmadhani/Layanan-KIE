@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="min-h-screen bg-white p-3">
-    <div class="max-w-3xl mx-auto bg-gray-100 p-5 rounded shadow">
+    <div class="max-w-3xl mx-auto bg-gray-100 p-5 rounded shadow-md">
 
         <div class="flex items-center mb-6 space-x-4 text-sm font-semibold">
             <button onclick="showTab('edit')" id="edit-tab" class="text-green-600 hover:underline">Edit Profil</button>
@@ -13,7 +13,7 @@
         </div>
 
         {{-- Edit Profil --}}
-        <form id="edit-form" action="#" method="POST" class="space-y-3">
+        <form id="edit-form" action="{{ route('profil.update') }}" method="POST" class="space-y-3">
             @csrf
             <div>
                 <label class="block text-sm font-medium mb-1">Nama</label>
@@ -33,6 +33,12 @@
                     class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
+            <div>
+                <label class="block text-sm font-medium mb-1">No WhatsApp</label>
+                <input type="text" name="phone_number" value="{{ old('phone_number', $pengguna->phone_number ?? '') }}"
+                    class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
             <div class="text-right pt-4">
                 <button type="submit"
                     class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-md">
@@ -42,7 +48,7 @@
         </form>
 
         {{-- Ganti Password --}}
-        <form id="password-form" action="" method="POST" class="space-y-3 hidden">
+        <form id="password-form" action="{{ route('profil.password') }}" method="POST" class="space-y-3 hidden">
             @csrf
             <div>
                 <label class="block text-sm font-medium mb-1">Password Lama</label>
@@ -55,13 +61,6 @@
                 <input type="password" name="new_password"
                     class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
-
-            <div>
-                <label class="block text-sm font-medium mb-1">Konfirmasi Password Baru</label>
-                <input type="password" name="new_password_confirmation"
-                    class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
-
             <div class="text-right pt-4">
                 <button type="submit"
                     class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-md">
@@ -71,6 +70,28 @@
         </form>
     </div>
 </div>
+
+@if (session('success'))
+    <div id="toast-success" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="flex items-center w-full max-w-xs p-4 text-green-800 bg-green-100 rounded-lg shadow">
+            <svg class="w-5 h-5 text-green-600 mr-2" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2" d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="text-sm font-medium">{{ session('success') }}</span>
+        </div>
+    </div>
+@endif
+
+@if ($errors->any())
+    <div id="toast-error" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="flex items-center w-full max-w-xs p-4 text-red-800 bg-red-100 rounded-lg shadow">
+            <svg class="w-5 h-5 text-red-600 mr-2" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2" d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="text-sm font-medium">{{ $errors->first() }}</span>
+        </div>
+    </div>
+@endif
 
 <script>
     function showTab(tab) {
@@ -91,6 +112,11 @@
             editTab.classList.remove('text-green-600');
         }
     }
+
+    setTimeout(() => {
+        document.getElementById('toast-success')?.remove();
+        document.getElementById('toast-error')?.remove();
+    }, 2000);
 </script>
 
 @endsection

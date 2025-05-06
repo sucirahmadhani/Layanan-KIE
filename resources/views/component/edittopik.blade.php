@@ -14,7 +14,7 @@
             <div class="mb-4">
                 <label class="form-label">Tahun</label>
                 <select id="editTahun" name="tahun" class="form-control">
-                    @for ($year = date('Y'); $year >= 2000; $year--)
+                    @for ($year = date('Y'); $year >= 2024; $year--)
                         <option value="{{ $year }}">{{ $year }}</option>
                     @endfor
                 </select>

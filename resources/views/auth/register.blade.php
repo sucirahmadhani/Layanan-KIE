@@ -68,6 +68,10 @@
                         <label class="form-label text-white">Email</label>
                         <input type="email" name="email" class="form-control" placeholder="Masukkan email anda">
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">No WhatsApp</label>
+                        <input type="text" name="phone_number" class="form-control" placeholder="Ex: 6281234567898">
+                    </div>
                     <div class="mb-2">
                         <div class="flex">
                             <button type="submit" class="flex w-1/2 mx-auto justify-center rounded-md mt-6 bg-green-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Daftar</button>
@@ -81,17 +85,29 @@
             </form>
 
         </div>
-        @if (session('success'))
-            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
-                <span class="font-medium">{{ session('success') }}</span>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
-                <span class="font-medium">{{ $errors->first() }}</span>
-        @endif
     </div>
+    @if (session('success'))
+    <div id="toast-success" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="flex items-center w-full max-w-xs p-4 text-green-800 bg-green-100 rounded-lg shadow">
+            <svg class="w-5 h-5 text-green-600 mr-2" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2" d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="text-sm font-medium">{{ session('success') }}</span>
+        </div>
+    </div>
+@endif
+
+@if ($errors->any())
+    <div id="toast-error" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="flex items-center w-full max-w-xs p-4 text-red-800 bg-red-100 rounded-lg shadow">
+            <svg class="w-5 h-5 text-red-600 mr-2" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2" d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="text-sm font-medium">{{ $errors->first() }}</span>
+        </div>
+    </div>
+@endif
+
 @include('auth.footer')
 <script src="./dist/js/tabler.min.js?1738096682" defer></script>
 <script src="./dist/js/demo.min.js?1738096682" defer></script>
@@ -104,6 +120,11 @@
       passwordInput.setAttribute('type', type);
       this.classList.toggle('fa-eye-slash');
     });
+
+    setTimeout(() => {
+        document.getElementById('toast-success')?.remove();
+        document.getElementById('toast-error')?.remove();
+    }, 2000);
 </script>
 </body>
 </html>

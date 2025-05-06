@@ -31,7 +31,7 @@
                   <a href="/home" class="rounded-md px-3 py-2 text-sm font-medium {{ Request::is('home') ?  'text-white' : 'text-gray-300' }} hover:bg-blue-700 hover:text-white">Beranda</a>
                   <a href="/proses" class="rounded-md px-3 py-2 text-sm font-medium {{ Request::is('proses') ? ' text-white' : 'text-gray-300' }} hover:bg-blue-700 hover:text-white">Proses</a>
                   <a href="/daftar" class="rounded-md px-3 py-2 text-sm font-medium {{ Request::is('daftar') ? 'text-white' : 'text-gray-300' }} hover:bg-blue-700 hover:text-white">Daftar</a>
-                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium {{ Request::is('riwayat') ?  'text-white' : 'text-gray-300' }} hover:bg-blue-700 hover:text-white">Riwayat</a>
+                  <a href="/riwayat" class="rounded-md px-3 py-2 text-sm font-medium {{ Request::is('riwayat') ?  'text-white' : 'text-gray-300' }} hover:bg-blue-700 hover:text-white">Riwayat</a>
                 </div>
             </div>
           </div>

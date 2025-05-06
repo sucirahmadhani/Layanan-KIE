@@ -1,5 +1,7 @@
 @extends('layout.admin')
 
+@section('back', route('soal.show', ['topik' => $topik->id]))
+
 @section('title', 'Tambah Soal')
 
 @section('content')
@@ -13,19 +15,19 @@
                     <label class="block text-gray-900 font-medium w-1/4 pt-2">Pertanyaan</label>
                     <textarea name="soal[0][pertanyaan]" rows="4" class="w-3/4 border border-blue-300 rounded p-2" placeholder="Masukkan pertanyaan" required></textarea>
                 </div>
-            
+
                 <div class="flex items-center gap-3">
                     <label class="block text-gray-900 font-medium w-1/4">Pilihan Benar</label>
                     <input type="text" name="soal[0][opsi_benar]" class="w-3/4 border border-blue-300 rounded p-2" placeholder="Masukkan pilihan jawaban yang benar" required>
                 </div>
-            
+
                 @for ($i = 1; $i <= 3; $i++)
                 <div class="flex items-center gap-3">
                     <label class="block text-gray-900 font-medium w-1/4">Pilihan Salah</label>
                     <input type="text" name="soal[0][opsi_salah][]" class="w-3/4 border border-blue-300 rounded p-2" placeholder="Masukkan pilihan jawaban yang salah" required>
                 </div>
                 @endfor
-            
+
                 <div class="flex items-center gap-3">
                     <label class="block text-gray-900 font-medium w-1/4">Tampilkan soal di tes?</label>
                     <select name="soal[0][tampilkan]" class="w-3/4 p-2 border rounded" required>
@@ -33,12 +35,12 @@
                         <option value="0">Tidak</option>
                     </select>
                 </div>
-            
+
                 <button type="button" class="hapus-soal text-red-600 absolute top-0 right-4 hover:underline hidden">
                     Hapus
                 </button>
             </div>
-            
+
         </div>
 
         <div class="col-span-1 md:col-span-2 flex flex-col items-end gap-2">
@@ -63,7 +65,6 @@
         const container = document.getElementById('soalContainer');
         const template = container.querySelector('.soal-item').cloneNode(true);
 
-        // Perbarui name attribute
         template.querySelectorAll('textarea, input, select').forEach(function (el) {
             const name = el.getAttribute('name');
             if (name) {
@@ -73,7 +74,6 @@
             }
         });
 
-        // Tampilkan tombol hapus
         template.querySelector('.hapus-soal').classList.remove('hidden');
 
         container.appendChild(template);

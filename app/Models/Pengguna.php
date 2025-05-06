@@ -17,6 +17,7 @@ class Pengguna extends Authenticatable implements MustVerifyEmail
         'nama',
         'username',
         'email',
+        'phone_number',
         'password',
         'role',
         'profile_updated',

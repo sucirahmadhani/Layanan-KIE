@@ -6,7 +6,7 @@
 
 <div class="p-8 min-h-screen bg-gray-100">
     <div class="bg-white p-6 rounded-lg shadow-md">
-        <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-2 gap-10">
             <div class="space-y-2">
                 <div class="grid grid-cols-2 gap-x-4">
                     <div class="font-semibold">Jenis Layanan</div>
@@ -65,7 +65,8 @@
             </div>
         </div>
         <div class="flex justify-end mt-0">
-            @if ($topikPertama)
+            @if ($layanan->jenis_layanan === 'KIE di BBPOM' && $topikPertama)
+            <div class="flex justify-end mt-4">
                 @if(!$tes || is_null($tes->skor_pretest))
                     <a href="{{ route('pretest.index', ['layananId' => $layanan->layanan_id, 'topikId' => $topikPertama->id]) }}"
                     class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded">
@@ -89,20 +90,10 @@
                         </a>
                     @endif
                 @endif
-            @endif
+            </div>
+        @endif
         </div>
     </div>
-    @if (session('success'))
-        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
-            <span class="font-medium">{{ session('success') }}</span>
-        </div>
-    @endif
-
-    @if ($errors->any())
-        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
-            <span class="font-medium">{{ $errors->first() }}</span>
-    @endif
-
     @if(session('showSurveyModal'))
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -115,6 +106,35 @@
     </script>
     @endif
 </div>
+
+@if (session('success'))
+    <div id="toast-success" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="flex items-center w-full max-w-xs p-4 text-green-800 bg-green-100 rounded-lg shadow">
+            <svg class="w-5 h-5 text-green-600 mr-2" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2" d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="text-sm font-medium">{{ session('success') }}</span>
+        </div>
+    </div>
+@endif
+
+@if ($errors->any())
+    <div id="toast-error" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="flex items-center w-full max-w-xs p-4 text-red-800 bg-red-100 rounded-lg shadow">
+            <svg class="w-5 h-5 text-red-600 mr-2" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2" d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="text-sm font-medium">{{ $errors->first() }}</span>
+        </div>
+    </div>
+@endif
+
+<script>
+    setTimeout(() => {
+        document.getElementById('toast-success')?.remove();
+        document.getElementById('toast-error')?.remove();
+    }, 2000);
+</script>
 @include('component.survey')
 @endsection
 

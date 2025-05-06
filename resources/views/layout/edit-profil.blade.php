@@ -1,17 +1,16 @@
 @extends('layout.pendaftar')
 
-@section('title', 'Akun')
+@section('title', 'Profil')
 
 @section('content')
 <header class="bg-white shadow-sm">
     <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-      <h1 class="text-2xl font-bold tracking-tight text-blue-900 ml-5">Akun</h1>
+      <h1 class="text-2xl font-bold tracking-tight text-blue-900 ml-5">Profil</h1>
     </div>
 </header>
 
 <div class="min-h-screen bg-gray-100 p-3">
     <div class="max-w-3xl mx-auto bg-white p-5 rounded shadow">
-
         <div class="flex items-center mb-6 space-x-4 text-sm font-semibold">
             <button onclick="showTab('edit')" id="edit-tab" class="text-green-600 hover:underline">Edit Profil</button>
             <span>|</span>
@@ -19,36 +18,42 @@
         </div>
 
         {{-- Edit Profil --}}
-        <form id="edit-form" action="#" method="POST" class="space-y-3">
+        <form id="edit-form" action="{{ route('profil.update') }}" method="POST" class="space-y-3">
             @csrf
             <div>
                 <label class="block text-sm font-medium mb-1">Nama</label>
-                <input type="text" name="nama" value="{{ old('nama', $pendaftar->nama ?? '') }}"
+                <input type="text" name="nama" value="{{ old('nama', $pengguna->nama ?? '') }}"
                     class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
             <div>
                 <label class="block text-sm font-medium mb-1">Username</label>
-                <input type="text" name="username" value="{{ old('username', $pendaftar->username ?? '') }}"
+                <input type="text" name="username" value="{{ old('username', $pengguna->username ?? '') }}"
                     class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
             <div>
                 <label class="block text-sm font-medium mb-1">Email</label>
-                <input type="email" name="email" value="{{ old('email', $pendaftar->email ?? '') }}"
+                <input type="email" name="email" value="{{ old('email', $pengguna->email ?? '') }}"
+                    class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">No WhatsApp</label>
+                <input type="text" name="phone_number" value="{{ old('phone_number', $pengguna->phone_number ?? '') }}"
                     class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
             <div class="text-right pt-4">
                 <button type="submit"
-                    class="bg-green-400 hover:bg-green-500 text-white font-semibold py-2 px-6 rounded-full">
+                    class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-md">
                     Simpan
                 </button>
             </div>
         </form>
 
         {{-- Ganti Password --}}
-        <form id="password-form" action="" method="POST" class="space-y-3 hidden">
+        <form id="password-form" action="{{ route('profil.password') }}" method="POST" class="space-y-3 hidden">
             @csrf
             <div>
                 <label class="block text-sm font-medium mb-1">Password Lama</label>
@@ -62,20 +67,35 @@
                     class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
-            <div>
-                <label class="block text-sm font-medium mb-1">Konfirmasi Password Baru</label>
-                <input type="password" name="new_password_confirmation"
-                    class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
-
             <div class="text-right pt-4">
                 <button type="submit"
-                    class="bg-green-400 hover:bg-green-500 text-white font-semibold py-2 px-6 rounded-full">
+                    class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-md">
                     Simpan
                 </button>
             </div>
         </form>
     </div>
+    @if (session('success'))
+        <div id="toast-success" class="fixed inset-0 flex items-center justify-center z-50">
+            <div class="flex items-center w-full max-w-xs p-4 text-green-800 bg-green-100 rounded-lg shadow">
+                <svg class="w-5 h-5 text-green-600 mr-2" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-width="2" d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="text-sm font-medium">{{ session('success') }}</span>
+            </div>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div id="toast-error" class="fixed inset-0 flex items-center justify-center z-50">
+            <div class="flex items-center w-full max-w-xs p-4 text-red-800 bg-red-100 rounded-lg shadow">
+                <svg class="w-5 h-5 text-red-600 mr-2" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-width="2" d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="text-sm font-medium">{{ $errors->first() }}</span>
+            </div>
+        </div>
+    @endif
 </div>
 
 <script>
@@ -97,5 +117,10 @@
             editTab.classList.remove('text-green-600');
         }
     }
+
+    setTimeout(() => {
+        document.getElementById('toast-success')?.remove();
+        document.getElementById('toast-error')?.remove();
+    }, 2000);
 </script>
 @endsection

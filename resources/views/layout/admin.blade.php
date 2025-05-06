@@ -72,7 +72,7 @@
             <button id="menu-button" class="text-blue-900 focus:outline-none md:hidden">
                 <i class="fa-solid fa-bars"></i>
             </button>
-            
+
             <h1 class="text-2xl font-bold text-blue-900 md:text-left flex-1">
                 @yield('title', 'Dashboard')
             </h1>

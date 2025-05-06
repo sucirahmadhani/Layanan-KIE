@@ -30,6 +30,7 @@ class UserController extends Controller
             'nama' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'username' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:20',
         ]);
 
         $pengguna = Auth::user();
@@ -38,15 +39,11 @@ class UserController extends Controller
             return redirect('/login')->withErrors(['error' => 'Silakan login terlebih dahulu']);
         }
 
-        // Cek apakah pengguna adalah pendaftar
-        if ($pengguna->role !== 'pendaftar') {
-            return redirect('/login')->withErrors(['error' => 'Akses tidak diizinkan']);
-        }
-
-        $pengguna->Pengguna::update([
+        $pengguna->update([
             'nama' => $request->nama,
             'email' => $request->email,
             'username' => $request->username,
+            'phone_number' => $request->phone_number,
         ]);
 
         return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
@@ -55,18 +52,18 @@ class UserController extends Controller
     public function updatePassword(Request $request)
     {
         $request->validate([
-            'password_lama' => 'required',
-            'password_baru' => 'required|min:6|confirmed',
+            'old_password' => 'required',
+            'new_password' => 'required|min:6',
         ]);
 
         $pengguna = Auth::user();
 
-        if (!$pengguna || !Hash::check($request->password_lama, $pengguna->password)) {
-            return redirect()->back()->withErrors(['password_lama' => 'Password lama tidak sesuai.']);
+        if (!$pengguna || !Hash::check($request->old_password, $pengguna->password)) {
+            return redirect()->back()->withErrors(['old_password' => 'Password lama tidak sesuai.']);
         }
 
-        $pengguna->password = Hash::make($request->password_baru);
-        $pengguna->Pengguna::save();
+        $pengguna->password = Hash::make($request->new_password);
+        $pengguna->save();
 
         return redirect()->back()->with('success', 'Password berhasil diperbarui.');
     }
@@ -80,7 +77,7 @@ class UserController extends Controller
         }
 
         return redirect('/login')->withErrors(['error' => 'Akses tidak diizinkan']);
-        
+
     }
 
     public function profile()
@@ -93,19 +90,7 @@ class UserController extends Controller
 
         if ($pengguna->role !== 'peserta') {
             return redirect('/login')->withErrors(['error' => 'Akses tidak diizinkan']);
-        }   
-
-        // $layanan = $pengguna->layanan->first();
-
-        // if (!$layanan) {
-        //     return redirect()->back()->with('error', 'Layanan tidak ditemukan.');
-        // }
-
-        // // Load topik yang terkait dengan layanan
-        // $layanan = Layanan::with(['narasumber', 'topik'])->findOrFail($layanan->id);
-
-        // // Ambil semua topik dari layanan
-        // $topiks = $layanan->topik;
+        }
 
         return view('peserta.profile', compact('pengguna'));
     }
@@ -113,7 +98,7 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
-        
+
         $pengguna = Auth::user();
 
         $pengguna->nama = $request->nama;

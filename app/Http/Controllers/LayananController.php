@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Helpers\Fonnte;
 use App\Models\Pengguna;
 use App\Models\Kategori;
 use App\Models\Topik;
@@ -13,6 +14,9 @@ use App\Models\Layanan;
 use App\Models\Narasumber;
 use App\Models\Status;
 use App\Models\Realisasi;
+use App\Models\Tes;
+
+
 
 class LayananController extends Controller
 {
@@ -78,8 +82,21 @@ class LayananController extends Controller
 
         $layanan->pengguna()->attach($pengguna->id);
 
-            return redirect()->route('proses.show')->with('success', 'Pendaftaran layanan berhasil, menunggu konfirmasi Balai Besar POM di Padang.');
+        $admin = Pengguna::where('role', 'admin')->first();
+
+        if ($admin && $admin->phone_number) {
+            $message = "📢 Pendaftaran Layanan Baru\n\n" .
+                    "🧾 Instansi: {$request->nama_instansi}\n" .
+                    "📌 Jenis Layanan: {$request->jenis_layanan}\n" .
+                    "📍 Tempat: {$request->tempat}\n" .
+                    "🕒 Waktu: {$request->waktu}\n\n" .
+                    "Silakan login ke sistem untuk konfirmasi.";
+
+            Fonnte::sendWA($admin->phone_number, $message);
         }
+
+        return redirect()->route('proses.show')->with('success', 'Pendaftaran layanan berhasil, menunggu konfirmasi Balai Besar POM di Padang.');
+    }
 
     public function proses()
     {
@@ -145,6 +162,15 @@ class LayananController extends Controller
                 'catatan' => $request->catatan,
             ]
         );
+
+        $pendaftar = $layanan->pengguna()->where('role', 'pendaftar')->first();
+
+        if ($pendaftar && $pendaftar->phone_number) {
+            $message = "📢 Pendaftaran layanan KIE anda telah dikonfirmasi oleh Balai Besar POM di Padang\n\n" .
+                       "Silakan login ke sistem untuk melihat detail.";
+
+            Fonnte::sendWA($pendaftar->phone_number, $message);
+        }
 
         return redirect()->route('layanan.permintaan')->with('success', 'Permintaan berhasil diperbarui.');
     }
@@ -225,7 +251,7 @@ class LayananController extends Controller
     public function realisasi_edit($id)
     {
         Carbon::setLocale('id');
-        $layanan = Layanan::findOrFail($id);
+        $layanan = Layanan::with(['narasumber', 'realisasi'])->findOrFail($id);
 
         return view('pendaftar.edit-realisasi', compact('layanan'));
     }
@@ -247,11 +273,15 @@ class LayananController extends Controller
         $laporanPath = null;
 
         if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('uploads/foto_realisasi', 'public');
+            $originalFotoName = $request->file('foto')->getClientOriginalName();
+            $request->file('foto')->storeAs('uploads/foto_realisasi', $originalFotoName, 'public');
+            $fotoName = $originalFotoName;
         }
 
         if ($request->hasFile('laporan')) {
-            $laporanPath = $request->file('laporan')->store('uploads/laporan_realisasi', 'public');
+            $originalLaporanName = $request->file('laporan')->getClientOriginalName();
+            $request->file('laporan')->storeAs('uploads/laporan_realisasi', $originalLaporanName, 'public');
+            $laporanName = $originalLaporanName;
         }
 
         $realisasi = Realisasi::where('layanan_id', $id)->first();
@@ -263,8 +293,8 @@ class LayananController extends Controller
                 'tanggal_realisasi' => $request->tanggal,
                 'waktu_realisasi' => $request->waktu,
                 'narasumber' => $request->narasumber,
-                'foto' => $fotoPath ?? $realisasi->foto,
-                'laporan' => $laporanPath ?? $realisasi->laporan,
+                'foto' => $fotoName ?? $realisasi->foto,
+                'laporan' => $laporanName ?? $realisasi->laporan,
                 'catatan' => $request->catatan,
             ]);
         } else {
@@ -282,6 +312,40 @@ class LayananController extends Controller
         }
 
         return redirect()->route('realisasi.show', $id)->with('success', 'Realisasi berhasil disimpan');
+    }
+
+    public function  riwayat()
+    {
+        Carbon::setLocale('id');
+        $pengguna = Auth::user();
+
+        $layanan = Layanan::whereHas('pengguna', function ($query) use ($pengguna) {
+            $query->where('pengguna.id', $pengguna->id);
+        })
+        ->whereHas('status', function ($query) {
+            $query->where('status', 'Selesai');
+        })
+        ->get();
+
+        return view('pendaftar.riwayat', compact('layanan'));
+    }
+
+    public function detail_riwayat($id)
+    {
+        Carbon::setLocale('id');
+
+        $layanan = Layanan::with(['realisasi', 'kategori', 'topik', 'narasumber'])->findOrFail($id);
+
+        $pengguna = Auth::user();
+
+        $pivot = $layanan->pengguna()->where('pengguna_id', $pengguna->id)->first()?->pivot;
+
+        $tes = null;
+        if ($pivot && $pivot->tes_id) {
+            $tes = Tes::find($pivot->tes_id);
+        }
+
+        return view('pendaftar.detail_riwayat', compact('layanan', 'tes'));
     }
 
 }

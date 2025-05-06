@@ -34,6 +34,7 @@
                         Kirim Link Reset
                     </button>
                 </div>
+                
             </form>
 
             @if (session('success'))

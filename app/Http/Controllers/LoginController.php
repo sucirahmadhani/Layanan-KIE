@@ -70,7 +70,8 @@ class LoginController extends Controller
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:pengguna,username',
-            'email' => 'required|string|email|max:255|unique:pengguna,email',
+            'email' => 'required|string|email|max:255',
+            'phone_number' => 'nullable|string|max:20',
             'password' => 'required|string|min:6',
         ]);
 
@@ -87,6 +88,7 @@ class LoginController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'phone_number' => $request->phone_number,
             'role' => 'pendaftar',
         ]);
 
