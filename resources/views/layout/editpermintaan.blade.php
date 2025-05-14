@@ -57,16 +57,25 @@
                         <div>
                             <label class="block text-sm font-medium mb-2">Narasumber</label>
                             <select name="narasumber_id" class="w-full border rounded-lg p-2">
-                                <option value="">-- Pilih Narasumber --</option>
+                                <option value="{{ $layanan->narasumber_id }}" selected>{{ optional($layanan->narasumber)->nama_narasumber ?? 'Pilih Narasumber' }}</option>
                                 @foreach($narasumber as $p)
                                     <option value="{{ $p->narasumber_id }}">{{ $p->nama_narasumber }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div>
+                            <label class="block text-sm font-medium mb-2">Link Survey</label>
+                            <input type="text" name="link_survey" value=" {{ $layanan->link_survey }}" class="w-full border rounded-lg p-2"></input>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Link Daftar Hadir</label>
+                            <input type="text" name="link_absence" value="{{ $layanan->link_absence }}" class="w-full border rounded-lg p-2"></input>
+                        </div>
+                        <div>
                             <label class="block text-sm font-medium mb-2">Catatan</label>
                             <textarea name="catatan" class="w-full border rounded-lg p-2 h-24">{{ $layanan->status->catatan ?? '' }}</textarea>
                         </div>
+
                     </div>
                     <div class="col-span-1 md:col-span-2 flex justify-end mt-5">
                         <button type="submit" class="bg-green-500 font-semibold text-white px-5 py-2 rounded hover:bg-green-600">Simpan</button>

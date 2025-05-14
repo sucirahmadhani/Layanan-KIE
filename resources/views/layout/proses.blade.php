@@ -23,6 +23,7 @@
     <div class="w-full max-w-10xl mt-0 space-y-3">
         @foreach ($layanan as $item)
         <div class="bg-white rounded-lg p-6 shadow-md mb-6">
+            <h2 class="text-xl font-semibold mb-7 tracking-tight text-green-600"> Kegiatan {{ $item->jenis_layanan }} bersama {{ $item->nama_instansi }}</h2>
             <div class="grid grid-cols-2 gap-20">
                 <div class="space-y-5">
                     <div class="block text-blue-800 bg-blue-100 p-4 rounded-lg shadow-sm text-center font-semibold">{{ $item->status->status }}</div>

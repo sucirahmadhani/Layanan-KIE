@@ -28,6 +28,8 @@ class Layanan extends Model
         'minggu',
         'bulan',
         'opsi_tanggal',
+        'link_survey',
+        'link_absence',
     ];
 
     public function narasumber()

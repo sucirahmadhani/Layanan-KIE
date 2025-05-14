@@ -32,6 +32,7 @@
 
     @foreach($layananList as $layanan)
     <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-xl font-semibold mb-7 tracking-tight text-green-600"> Kegiatan {{ $layanan->jenis_layanan }} bersama {{ $layanan->nama_instansi }}</h2>
         <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
             <div class="space-y-2">
                 <div class="grid grid-cols-2 gap-x-4">
@@ -63,34 +64,73 @@
 
                     <div class="font-semibold">Narasumber</div>
                     <div>{{ $layanan->narasumber->nama_narasumber }}</div>
-
                 </div>
             </div>
 
             <div class="flex flex-col  gap-4">
                 <div class="grid grid-cols-2 gap-x-4">
-                    <div class="bg-white-200 text-center p-4 rounded  w-full">
-                    </div>
+                    @if($layanan->tes && $layanan->tes->skor_pretest !== null)
+                        <div class="bg-purple-100 text-center p-4 rounded shadow w-full">
+                            <div class="text-lg font-semibold">
+                                Skor Pre-Test
+                            </div>
+                            <div class="text-2xl font-bold text-purple-800">
+                                {{ $layanan->tes->skor_pretest ?? '-' }}/100
+                            </div>
+                        </div>
+                    @else
+                        <div class="grid grid-cols-2 gap-x-4">
+                            <div class="bg-white-200 text-center p-4 rounded  w-full">
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="bg-blue-200 text-center p-4 rounded shadow w-full">
-                        <div class="text-2xl font-bold">
+                        <div class="text-lg font-semibold">Hari kegiatan</div>
+                        <div class="text-3xl font-bold text-blue-800">
                             {{ $layanan->labelHariKegiatan }}
                         </div>
-                        <div>Hari kegiatan</div>
                     </div>
+
+                    @if($layanan->tes && $layanan->tes->skor_posttest !== null)
+                        <div class="bg-purple-100 text-center p-4 rounded shadow w-full">
+                            <div class="text-lg font-semibold">
+                                Skor Post-Test
+                            </div>
+                            <div class="text-2xl font-bold text-purple-800">
+                                {{ $layanan->tes->skor_posttest ?? '-' }}/100
+                            </div>
+                        </div>
+                    @else
+                        <div class="grid grid-cols-2 gap-x-4">
+                            <div class="bg-white-200 text-center p-4 rounded  w-full">
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
-        <div class="flex justify-end mt-0">
+        <div class="flex justify-end space-x-3">
+            @if ($layanan->hariKegiatan >= -1 && $layanan->hariKegiatan <= 1 && $layanan->link_absence)
+                <div class="flex justify-end mt-4">
+                    <a href="{{ $layanan->link_absence }}"
+                        target="_blank"
+                        class="bg-pink-500 hover:bg-pink-600 text-white px-5 py-2 rounded">
+                        Absen
+                    </a>
+                </div>
+            @endif
+
             @if ($layanan->hariKegiatan <= 0)
                 @if ($layanan->jenis_layanan === 'KIE di BBPOM Padang' && $layanan->topikPertama)
                     <div class="flex justify-end mt-4">
                         @if(!$layanan->tes || is_null($layanan->tes->skor_pretest))
-                            <a href="{{ route('pretest.index', ['layananId' => $layanan->layanan_id, 'topikId' => $layanan->topikPertama->id]) }}"
+                            <a href="{{ route('pendaftar.pretest', ['layananId' => $layanan->layanan_id, 'topikId' => $layanan->topikPertama->id]) }}"
                             class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded">
                                 Pre-Test
                             </a>
                         @elseif(is_null($layanan->tes->skor_posttest))
-                            <a href="{{ route('posttest.index', ['layananId' => $layanan->layanan_id, 'topikId' => $layanan->topikPertama->id]) }}"
+                            <a href="{{ route('pendaftar.postest', ['layananId' => $layanan->layanan_id, 'topikId' => $layanan->topikPertama->id]) }}"
                             class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded">
                                 Post-Test
                             </a>
@@ -101,7 +141,7 @@
                                     Unduh Sertifikat
                                 </a>
                             @else
-                                <a href="{{ route('posttest.index', ['layananId' => $layanan->layanan_id, 'topikId' => $layanan->topikPertama->id]) }}"
+                                <a href="{{ route('pendaftar.postest', ['layananId' => $layanan->layanan_id, 'topikId' => $layanan->topikPertama->id]) }}"
                                 class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded">
                                     Ulangi Post-Test
                                 </a>
@@ -112,6 +152,17 @@
             @endif
         </div>
     </div>
+     @if(session('showSurveyModal'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('survey-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        });
+    </script>
+    @endif
     @endforeach
     @endif
 </div>
@@ -144,4 +195,6 @@
         document.getElementById('toast-error')?.remove();
     }, 2000);
 </script>
+
+@include('component.survey')
 @endsection

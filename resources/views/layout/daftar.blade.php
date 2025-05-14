@@ -36,7 +36,18 @@
         </div>
         <div>
             <label class="block text-gray-700 mb-2">Tempat</label>
-            <input name="tempat" type="text" class="w-full p-2 border rounded" placeholder="Masukkan Tempat">
+
+            <!-- Select untuk pilih lokasi -->
+            <select id="tempatSelect" class="w-full p-2 border rounded" onchange="handleTempatChange()">
+                <option value="">-- Pilih Tempat --</option>
+                <option value="Balai Besar POM di Padang">Balai Besar POM di Padang</option>
+                <option value="lainnya">Lainnya</option>
+            </select>
+
+            <!-- Input tempat manual, akan menimpa value select -->
+            <input name="tempat" id="tempatInput" type="text"
+                class="w-full p-2 border rounded mt-2 hidden"
+                placeholder="Masukkan Tempat Lainnya">
         </div>
         <div x-data="{ selected: [], open: false }" class="relative">
             <label class="block text-gray-700 mb-2">Topik</label>
@@ -136,6 +147,29 @@
 @endif
 
 <script>
+
+    function handleTempatChange() {
+        const select = document.getElementById('tempatSelect');
+        const input = document.getElementById('tempatInput');
+
+        if (select.value === 'lainnya') {
+            input.classList.remove('hidden');
+            input.setAttribute('required', 'required');
+        } else {
+            input.classList.add('hidden');
+            input.removeAttribute('required');
+            input.value = select.value;
+        }
+    }
+    
+    document.querySelector('form')?.addEventListener('submit', function () {
+        const select = document.getElementById('tempatSelect');
+        const input = document.getElementById('tempatInput');
+        if (select.value !== 'lainnya') {
+            input.value = select.value;
+        }
+    });
+
     setTimeout(() => {
         document.getElementById('toast-success')?.remove();
         document.getElementById('toast-error')?.remove();

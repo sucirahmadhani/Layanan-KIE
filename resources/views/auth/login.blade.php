@@ -27,13 +27,17 @@
 
     <div class="page">
         <header class="navbar navbar-expand-md d-print-none shadow-none mt-5 mb-5" >
-            <div class="container-xl">
+            <div class="container-xl d-flex justify-content-between align-items-center w-100">
                 <div class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
                     <a href="/"><img src="/img/Group12.png" alt=""></a>
                 </div>
+
+                <div class="d-flex align-items-center">
+                    <img src="/img/kataBPOM.svg" alt="" class="h-10">
+                </div>
             </div>
         </header>
-        <div class="container container-normal  ">
+        <div class="container container-normal mt-3">
             <div class="row align-items-center g-4">
                 <div class="col-lg d-none d-lg-block">
                     <div class="d-flex align-items-center justify-content-center h-150">
@@ -41,14 +45,17 @@
                         <h1 class="text-blue-900 font-bold text-4xl mb-3">
                           Selamat Datang
                         </h1>
+                        <h1 class="text-blue-900 font-bold text-2xl mb-2">
+                          di "POJOK KIE POM PADANG"
+                        </h1>
                         <h2 class="text-blue-900 font-bold text-2xl mb-2">
-                          di Layanan Komunikasi Informasi dan Edukasi
+                          Layanan Komunikasi Informasi dan Edukasi (KIE)
                         </h2>
                         <h3 class="text-blue-900 font-bold text-xl mb-3">
-                          BALAI BESAR POM DI PADANG
+                          BALAI BESAR PENGAWASAN OBAT DAN MAKANAN (POM) DI PADANG
                         </h3>
                         <p class="text-black font-bold text-lg">
-                          Dapatkan edukasi yang berkualitas untuk menunjang kesehatan keluarga anda!
+                          Dapatkan Edukasi yang Tepercaya untuk Cerdas Memilih Obat dan Makanan yang Aman dan Bermutu!
                         </p>
                       </div>
                     </div>

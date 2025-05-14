@@ -6,6 +6,7 @@
 
 <div class="p-8 min-h-screen bg-gray-100">
     <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-7 tracking-tight text-green-600"> Kegiatan {{ $layanan->jenis_layanan }} bersama {{ $layanan->nama_instansi }}</h2>
         <div class="grid grid-cols-2 md:grid-cols-2 gap-10">
             <div class="space-y-2">
                 <div class="grid grid-cols-2 gap-x-4">
@@ -49,23 +50,66 @@
                     @php
                         $labelHariKegiatan = (int) $hariKegiatan >= 0 ? 'D-' . (int) $hariKegiatan : 'D+' . abs((int) $hariKegiatan);
                     @endphp
-                    <div class="bg-red-200 text-center p-4 rounded shadow w-full">
-                        <div class="text-2xl font-bold">
+                    <div class="bg-red-100 text-center p-4 rounded shadow w-full">
+                        <div class="text-lg font-semibold">Hari kegiatan</div>
+                        <div class="text-2xl font-bold text-red-800">
                             {{ $labelHariKegiatan }}
                         </div>
-                        <div>Hari kegiatan</div>
+
                     </div>
-                    <div class="bg-blue-200 text-center p-4 rounded shadow w-full">
-                        <div class="text-2xl font-bold">
+                    <div class="bg-blue-100 text-center p-4 rounded shadow w-full">
+                        <div class="text-lg font-semibold">Akun nonaktif</div>
+                        <div class="text-2xl font-bold text-blue-800">
                             D-{{ (int) ($hariNonaktif >= 0 ? $hariNonaktif : 0) }}
                         </div>
-                        <div>Akun nonaktif</div>
+
                     </div>
+                    @if($tes && $tes->skor_pretest !== null)
+                        <div class="bg-purple-100 text-center p-4 rounded shadow w-full">
+                            <div class="text-lg font-semibold">
+                                Skor Pre-Test
+                            </div>
+                            <div class="text-2xl font-bold text-purple-800">
+                                {{ $tes->skor_pretest ?? '-' }}/100
+                            </div>
+                        </div>
+                    @else
+                        <div class="grid grid-cols-2 gap-x-4">
+                            <div class="bg-white-200 text-center p-4 rounded  w-full">
+                            </div>
+                        </div>
+                    @endif
+
+                    @if($tes && $tes->skor_posttest !== null)
+                        <div class="bg-pink-100 text-center p-4 rounded shadow w-full">
+                            <div class="text-lg font-semibold">
+                                Skor Post-Test
+                            </div>
+                            <div class="text-2xl font-bold text-pink-800">
+                                {{ $tes->skor_posttest ?? '-' }}/100
+                            </div>
+                        </div>
+                    @else
+                        <div class="grid grid-cols-2 gap-x-4">
+                            <div class="bg-white-200 text-center p-4 rounded  w-full">
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
-        <div class="flex justify-end mt-0">
-            @if ($layanan->jenis_layanan === 'KIE di BBPOM' && $topikPertama)
+        <div class="flex justify-end mt-0 items-start space-x-2">
+            @if ($hariKegiatan >= -1 && $hariKegiatan <= 1 && $layanan->link_absence)
+                <div class="flex justify-end mt-4">
+                    <a href="{{ $layanan->link_absence }}"
+                        target="_blank"
+                        class="bg-pink-500 hover:bg-pink-600 text-white px-5 py-2 rounded">
+                        Absen
+                    </a>
+                </div>
+            @endif
+
+            @if ($layanan->jenis_layanan === 'KIE di BBPOM Padang' && $topikPertama)
             <div class="flex justify-end mt-4">
                 @if(!$tes || is_null($tes->skor_pretest))
                     <a href="{{ route('pretest.index', ['layananId' => $layanan->layanan_id, 'topikId' => $topikPertama->id]) }}"
@@ -91,7 +135,7 @@
                     @endif
                 @endif
             </div>
-        @endif
+            @endif
         </div>
     </div>
     @if(session('showSurveyModal'))
@@ -136,6 +180,7 @@
     }, 2000);
 </script>
 @include('component.survey')
+@include('component.link')
 @endsection
 
 

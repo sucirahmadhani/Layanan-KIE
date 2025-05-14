@@ -52,9 +52,7 @@ class TopikController extends Controller
 
     public function soal(Topik $topik)
     {
-        $soals = Soal::where('topik_id', $topik->id)
-                 ->orderByDesc('tampilkan')
-                 ->get();
+        $soals = Soal::where('topik_id', $topik->id)->get();
 
         foreach ($soals as $soal) {
             $soal->opsi = json_decode($soal->opsi_salah, true);
@@ -70,21 +68,11 @@ class TopikController extends Controller
 
     public function soal_store(Request $request, Topik $topik)
     {
-        $soalTampilkanCount = Soal::where('topik_id', $topik->id)
-                              ->where('tampilkan', true)
-                              ->count();
-
-        if ($soalTampilkanCount >= 10) {
-            return redirect()->route('soal.show', $topik->id)
-                            ->with('error', 'Jumlah soal yang tampilkan sudah mencapai batas maksimum (10 soal).');
-        }
-
         $request->validate([
             'soal.*.pertanyaan' => 'required|string',
             'soal.*.opsi_benar' => 'required|string',
             'soal.*.opsi_salah' => 'required|array|min:3',
             'soal.*.opsi_salah.*' => 'required|string',
-            'soal.*.tampilkan' => 'required|boolean',
         ]);
 
         foreach ($request->soal as $item) {
@@ -93,7 +81,6 @@ class TopikController extends Controller
                 'pertanyaan' => $item['pertanyaan'],
                 'opsi_benar' => $item['opsi_benar'],
                 'opsi_salah' => json_encode($item['opsi_salah']),
-                'tampilkan' => $item['tampilkan'],
             ]);
 
         }
@@ -119,30 +106,17 @@ class TopikController extends Controller
     public function soal_update(Request $request, Soal $soal)
     {
 
-        if ($request->input('tampilkan') == true) {
-            $soalTampilkanCount = Soal::where('topik_id', $soal->topik_id)
-                                      ->where('tampilkan', true)
-                                      ->count();
-
-            if ($soalTampilkanCount >= 10 && $soal->tampilkan != true) {
-                return redirect()->route('soal.show', $soal->topik_id)
-                                 ->with('error', 'Jumlah soal yang tampilkan sudah mencapai batas maksimum (10 soal).');
-            }
-        }
-
         $validated = $request->validate([
             'pertanyaan' => 'required|string',
             'opsi_benar' => 'required|string',
             'opsi_salah' => 'required|array|min:3',
             'opsi_salah.*' => 'required|string',
-            'tampilkan' => 'required|boolean',
         ]);
 
         $soal->update([
             'pertanyaan' => $validated['pertanyaan'],
             'opsi_benar' => $validated['opsi_benar'],
             'opsi_salah' => json_encode($validated['opsi_salah']),
-            'tampilkan' => $validated['tampilkan'],
         ]);
 
         return redirect()->route('soal.show', $soal->topik_id)->with('success', 'Soal berhasil diperbarui!');

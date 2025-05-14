@@ -37,11 +37,13 @@ class Pengguna extends Authenticatable implements MustVerifyEmail
 
     public function layanan()
     {
-        return $this->belongsToMany(Layanan::class, 'layanan_pengguna', 'pengguna_id', 'layanan_id');
+        return $this->belongsToMany(Layanan::class, 'layanan_pengguna', 'pengguna_id', 'layanan_id')
+                    ->withPivot('tes_id');
     }
 
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerifyEmail);
     }
+
 }

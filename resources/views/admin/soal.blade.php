@@ -19,7 +19,6 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-400">
                     <tr>
                         <th class="px-4 py-3 tracking-wide w-2/3">Pertanyaan</th>
-                        <th class="px-4 py-3 tracking-wide text-center w-1/6">Tampilkan</th>
                         <th class="px-4 py-3 tracking-wide text-center w-1/6">Aksi</th>
                     </tr>
                 </thead>
@@ -38,13 +37,6 @@
                                     </li>
                                 @endforeach
                             </ul>
-                        </td>
-                        <td class="px-4 py-3 border text-center">
-                            @if ($soal->tampilkan)
-                                <span class="bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full">Ya</span>
-                            @else
-                                <span class="bg-red-100 text-red-800 text-sm px-3 py-1 rounded-full">Tidak</span>
-                            @endif
                         </td>
                         <td class="px-5 py-3 text-center align-middle">
                             <div class="flex justify-center items-center space-x-2">

@@ -17,7 +17,6 @@ class Soal extends Model
         'pertanyaan',
         'opsi_benar',
         'opsi_salah',
-        'tampilkan',
     ];
 
     protected $casts = [

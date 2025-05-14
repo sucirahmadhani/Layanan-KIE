@@ -81,28 +81,78 @@ class DashboardController extends Controller
         return view('layout.home', compact('layananList'));
     }
 
-        public function dashboard()
-        {
-            $totalSeminar = Layanan::count();
-            $totalPeserta = Layanan::sum('jumlah_peserta');
-            $totalPartisipasi = Realisasi::sum('jumlah_peserta_hadir');
+    public function dashboard()
+    {
+        $jenisLayanan = Layanan::select('jenis_layanan')->distinct()->get();
+        $urutan = ['KIE di BBPOM Padang', 'KIE di luar BBPOM Padang', 'KIETOMAS (Komunikasi Informasi Edukasi Bersama Tokoh Masyarakat)']; // Sesuaikan dengan urutan yang diinginkan
+        $jenisLayanan = $jenisLayanan->filter(function ($item) use ($urutan) {
+            return in_array($item->jenis_layanan, $urutan);
+        })->sortBy(function ($item) use ($urutan) {
+            return array_search($item->jenis_layanan, $urutan);
+        });
+
+        $data = [];
+        $warna = [
+            'KIE di luar BBPOM Padang' => [
+                'cards' => ['bg-red-200', 'bg-green-200', 'bg-blue-200'],
+                'chart' => ['#ef4444', '#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899'],
+            ],
+            'KIE di BBPOM Padang' => [
+                'cards' => ['bg-yellow-200', 'bg-purple-200', 'bg-pink-200'],
+                'chart' => ['#facc15', '#a78bfa', '#f472b6', '#60a5fa', '#34d399', '#f87171'],
+            ],
+            'KIETOMAS (Komunikasi Informasi Edukasi Bersama Tokoh Masyarakat)' => [
+                'cards' => ['bg-teal-200', 'bg-indigo-200', 'bg-red-200'],
+                'chart' => ['#2dd4bf', '#6366f1', '#06b6d4', '#0ea5e9', '#9333ea', '#f43f5e'],
+            ],
+        ];
+
+        foreach ($jenisLayanan as $jenis) {
+            $totalSeminar = Layanan::where('jenis_layanan', $jenis->jenis_layanan)->count();
+            $totalPeserta = Layanan::where('jenis_layanan', $jenis->jenis_layanan)->sum('jumlah_peserta');
+
+            $totalPartisipasi = Realisasi::whereHas('layanan', function ($q) use ($jenis) {
+                $q->where('jenis_layanan', $jenis->jenis_layanan);
+            })->sum('jumlah_peserta_hadir');
+
+            $persentasePartisipasi = 0;
+            if ($totalPeserta > 0) {
+                $persentasePartisipasi = ($totalPartisipasi / $totalPeserta) * 100;
+            }
+
+            $persentasePartisipasi = min($persentasePartisipasi, 100);
 
             $kategoriPeserta = DB::table('layanan')
-            ->join('kategori', 'layanan.kategori_id', '=', 'kategori.id')
-            ->select('kategori.nama as kategori', DB::raw('SUM(layanan.jumlah_peserta) as total'))
-            ->groupBy('kategori.nama')
-            ->get();
+                ->join('kategori', 'layanan.kategori_id', '=', 'kategori.id')
+                ->select('kategori.nama as kategori', DB::raw('SUM(layanan.jumlah_peserta) as total'))
+                ->where('layanan.jenis_layanan', $jenis->jenis_layanan)
+                ->groupBy('kategori.nama')
+                ->get();
 
             $topikPopuler = DB::table('layanan_topik')
-            ->join('topik', 'layanan_topik.topik_id', '=', 'topik.id')
-            ->select('topik.judul as topik', DB::raw('COUNT(DISTINCT layanan_topik.layanan_id) as total'))
-            ->groupBy('topik.judul')
-            ->orderByDesc('total')
-            ->limit(5)
-            ->get();
+                ->join('layanan', 'layanan_topik.layanan_id', '=', 'layanan.layanan_id')
+                ->join('topik', 'layanan_topik.topik_id', '=', 'topik.id')
+                ->select('topik.judul as topik', DB::raw('COUNT(DISTINCT layanan_topik.layanan_id) as total'))
+                ->where('layanan.jenis_layanan', $jenis->jenis_layanan)
+                ->groupBy('topik.judul')
+                ->orderByDesc('total')
+                ->limit(5)
+                ->get();
 
-            return view('layout.dashboard', compact('totalSeminar', 'totalPeserta', 'totalPartisipasi', 'kategoriPeserta', 'topikPopuler'));
+            $data[$jenis->jenis_layanan] = [
+                'totalSeminar' => $totalSeminar,
+                'totalPeserta' => $totalPeserta,
+                'persentasePartisipasi' => $persentasePartisipasi,
+                'kategoriPeserta' => $kategoriPeserta,
+                'topikPopuler' => $topikPopuler,
+            ];
         }
 
+        return view('layout.dashboard', [
+            'jenisLayanan' => $jenisLayanan,
+            'data' => $data,
+            'warna' => $warna
+        ]);
+    }
 
 }

@@ -1,4 +1,4 @@
-@extends('peserta.peserta')
+@extends('layout.pendaftar')
 
 @section('title', 'Post-test')
 
@@ -9,7 +9,7 @@
     <div class="bg-white p-4 rounded-lg shadow-md">
         <h2 class="text-xl font-semibold text-[#2B4570] mb-4">{{ $topik->judul }}</h2>
 
-        <form method="POST" action="{{ $isLastTopik ? route('posttest.submit', [$layananId]) : route('posttest.next', [$layananId, $topikId]) }}">
+        <form method="POST" action="{{ $isLastTopik ? route('pendaftar.kirim', [$layananId]) : route('pendaftar.nextpost', [$layananId, $topikId]) }}">
             @csrf
 
             @foreach($soals as $index => $soal)

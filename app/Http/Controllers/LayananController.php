@@ -118,7 +118,7 @@ class LayananController extends Controller
                     'pengguna' => function ($query) {
                         $query->select('pengguna.id', 'nama', 'username', 'email'); }
                     ])
-                    ->get();
+                    ->orderBy('created_at', 'desc')->get();
 
         return view('layout.proses', compact('layanan'));
     }
@@ -127,7 +127,7 @@ class LayananController extends Controller
     {
         $layanan = Layanan::whereHas('status', function ($query) {
             $query->where('status', '!=', 'Selesai');
-        })->get();
+        })->orderBy('created_at', 'desc')->get();
 
         return view('layout.permintaan', compact('layanan'));
     }
@@ -148,11 +148,15 @@ class LayananController extends Controller
             'status' => 'required|string',
             'narasumber_id' => 'nullable|exists:narasumber,narasumber_id',
             'catatan' => 'nullable|string',
+            'link_survey' => 'nullable|string',
+            'link_absence'=> 'nullable|string',
         ]);
 
         $layanan = Layanan::where('layanan_id', $id)->firstOrFail();
         $layanan->tanggal = $request->tanggal;
         $layanan->narasumber_id = $request->narasumber_id;
+        $layanan->link_survey = $request->link_survey;
+        $layanan->link_absence = $request->link_absence;
         $layanan->save();
 
         $status = Status::updateOrCreate(
@@ -235,7 +239,7 @@ class LayananController extends Controller
         Carbon::setLocale('id');
         $layanan = Layanan::whereHas('status', function ($query) {
             $query->where('status', 'Selesai');
-        })->get();
+        })->orderBy('created_at', 'desc')->get();
 
         return view('pendaftar.realisasi', compact('layanan'));
     }
@@ -243,9 +247,37 @@ class LayananController extends Controller
     public function realisasi_show($id)
     {
         Carbon::setLocale('id');
-        $layanan = Layanan::with(['realisasi', 'kategori', 'topik', 'narasumber'])->findOrFail($id);
 
-        return view('pendaftar.detail_realisasi', compact('layanan'));
+        $layanan = Layanan::with([
+            'realisasi',
+            'kategori',
+            'topik',
+            'narasumber',
+            'pengguna' => function ($query) {
+                $query->withPivot('tes_id');
+            }
+        ])->findOrFail($id);
+
+        $averageRating = null;
+        $averagePretest = null;
+        $averagePosttest = null;
+
+        if ($layanan->jenis_layanan === 'KIE di BBPOM Padang' && $layanan->relationLoaded('pengguna')) {
+            $tesList = $layanan->pengguna->map(function ($pengguna) {
+                return Tes::find($pengguna->pivot->tes_id);
+            })->filter();
+
+            $ratings = $tesList->pluck('rating')->filter();
+            $averageRating = $ratings->count() ? round($ratings->avg(), 1) : null;
+
+            $pretests = $tesList->pluck('skor_pretest')->filter();
+            $averagePretest = $pretests->count() ? round($pretests->avg(), 1) : null;
+
+            $posttests = $tesList->pluck('skor_posttest')->filter();
+            $averagePosttest = $posttests->count() ? round($posttests->avg(), 1) : null;
+        }
+
+        return view('pendaftar.detail_realisasi', compact('layanan', 'averageRating', 'averagePretest', 'averagePosttest'));
     }
 
     public function realisasi_edit($id)

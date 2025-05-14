@@ -32,10 +32,10 @@
                             Jenis KIE
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Topik
+                            Instansi
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Instansi
+                            Topik
                         </th>
                         <th scope="col" class="px-6 py-4 text-center">
                             Aksi

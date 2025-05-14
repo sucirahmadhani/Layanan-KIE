@@ -28,14 +28,6 @@
                 </div>
             @endforeach
 
-            <div class="flex items-center gap-3">
-                <label class="block text-gray-900 font-medium w-1/4">Tampilkan soal di tes?</label>
-                <select name="tampilkan" class="w-3/4 p-2 border rounded" required>
-                    <option value="1" {{ $soal->tampilkan ? 'selected' : '' }}>Ya</option>
-                    <option value="0" {{ !$soal->tampilkan ? 'selected' : '' }}>Tidak</option>
-                </select>
-            </div>
-
             <div class="flex justify-end">
                 <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">
                     Update Soal

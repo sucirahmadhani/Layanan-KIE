@@ -95,6 +95,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/survey', [TesController::class, 'submitSurvey'])->name('survey.submit');
     Route::get('/sertifikat/{layananId}', [TesController::class, 'generate'])->name('sertifikat.generate');
 
+    // Route untuk tes pendaftar
+    Route::get('/pre-test/{layananId}/{topikId}', [TesController::class, 'pre_test'])->name('pendaftar.pretest');
+    Route::post('/pre-test/{layananId}/{topikId}/next', [TesController::class, 'selanjutnya'])->name('pendaftar.next');
+    Route::post('/pre-test/{layananId}/submit', [TesController::class, 'kirim'])->name('pendaftar.submit');
+    Route::get('/post-test/{layananId}/{topikId}', [TesController::class, 'postest'])->name('pendaftar.postest');
+    Route::post('/post-test/{layananId}/{topikId}/next', [TesController::class, 'topiknext'])->name('pendaftar.nextpost');
+    Route::post('/post-test/{layanan}', [TesController::class, 'kirimtes'])->name('pendaftar.kirim');
+    Route::post('/rating', [TesController::class, 'submitrating'])->name('rating.submit');
+
     // Route untuk riwayat
     Route::get('/riwayat', [LayananController::class, 'riwayat'])->name('riwayat');
     Route::get('/riwayat/{id}', [LayananController::class, 'detail_riwayat'])->name('riwayat.detail');

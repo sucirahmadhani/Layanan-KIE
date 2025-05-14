@@ -94,16 +94,16 @@
                                     -
                                 @endif
                             </div>
-                            @if($layanan->jenis_layanan === 'KIE di BBPOM' && $tes)
-                                <div class="bg-red-200 text-center p-4 rounded shadow w-full">
+                            @if($layanan->jenis_layanan === 'KIE di BBPOM Padang' && $tes)
+                                <div class="bg-red-200 text-center p-4 mt-3 rounded shadow w-full">
                                     <div class="text-2xl font-bold">
-                                        {{ $tes->skor_pretest }}
+                                        {{ $tes->skor_pretest }}/100
                                     </div>
                                     <div>Skor Pre-test</div>
                                 </div>
-                                <div class="bg-blue-200 text-center p-4 rounded shadow w-full">
+                                <div class="bg-blue-200 text-center p-4 mt-3 rounded shadow w-full">
                                     <div class="text-2xl font-bold">
-                                        {{ $tes->skor_posttest }}
+                                        {{ $tes->skor_posttest }}/100
                                     </div>
                                     <div>Skor Post-test</div>
                                 </div>
@@ -111,7 +111,7 @@
                         </div>
                     </div>
                 </div>
-                @if($layanan->jenis_layanan === 'KIE di BBPOM')
+                @if($layanan->jenis_layanan === 'KIE di BBPOM Padang')
                     <div class="flex justify-end mt-10">
                         <a href="{{ route('sertifikat.generate', ['layananId' => $layanan->layanan_id]) }}"
                         class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded">

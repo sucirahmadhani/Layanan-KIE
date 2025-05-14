@@ -28,14 +28,6 @@
                 </div>
                 @endfor
 
-                <div class="flex items-center gap-3">
-                    <label class="block text-gray-900 font-medium w-1/4">Tampilkan soal di tes?</label>
-                    <select name="soal[0][tampilkan]" class="w-3/4 p-2 border rounded" required>
-                        <option value="1">Ya</option>
-                        <option value="0">Tidak</option>
-                    </select>
-                </div>
-
                 <button type="button" class="hapus-soal text-red-600 absolute top-0 right-4 hover:underline hidden">
                     Hapus
                 </button>
