@@ -39,6 +39,22 @@
                 <div class="text-xl font-bold">{{ number_format($d['persentasePartisipasi'], 2) }}%</div>
                 <div>Partisipasi</div>
             </div>
+            @if ($jenis->jenis_layanan == 'KIE di BBPOM Padang')
+                <div class="col-span-3 grid grid-cols-3 gap-4 mt-2">
+                    <div class="bg-blue-100 p-4 rounded-lg text-center shadow-md">
+                        <div class="text-xl font-bold">{{ number_format($d['avgPretest'], 2) }}</div>
+                        <div>Rata-rata Pre-Test</div>
+                    </div>
+                    <div class="bg-blue-200 p-4 rounded-lg text-center shadow-md">
+                        <div class="text-xl font-bold">{{ number_format($d['avgPosttest'], 2) }}</div>
+                        <div>Rata-rata Post-Test</div>
+                    </div>
+                    <div class="bg-green-200 p-4 rounded-lg text-center shadow-md">
+                        <div class="text-xl font-bold">{{ number_format($d['peningkatan'], 2) }}%</div>
+                        <div>Peningkatan Pemahaman</div>
+                    </div>
+                </div>
+            @endif
         </div>
 
         <!-- Charts Section -->
@@ -143,6 +159,7 @@
             }
         });
     @endforeach
+
 </script>
 
 @endsection

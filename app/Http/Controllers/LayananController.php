@@ -130,6 +130,7 @@ class LayananController extends Controller
         })->orderBy('created_at', 'desc')->get();
 
         return view('layout.permintaan', compact('layanan'));
+
     }
 
     public function edit($id)
@@ -143,20 +144,28 @@ class LayananController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'tanggal' => 'nullable|date',
+        $rules = [
             'status' => 'required|string',
-            'narasumber_id' => 'nullable|exists:narasumber,narasumber_id',
-            'catatan' => 'nullable|string',
             'link_survey' => 'nullable|string',
-            'link_absence'=> 'nullable|string',
-        ]);
+            'link_absence' => 'nullable|string',
+            'catatan' => 'nullable|string',
+        ];
+
+        if ($request->status === 'Disetujui') {
+            $rules['tanggal'] = 'required|date';
+            $rules['narasumber_id'] = 'required|exists:narasumber,narasumber_id';
+        } else {
+            $rules['tanggal'] = 'nullable|date';
+            $rules['narasumber_id'] = 'nullable|exists:narasumber,narasumber_id';
+        }
+
+        $validatedData = $request->validate($rules);
 
         $layanan = Layanan::where('layanan_id', $id)->firstOrFail();
-        $layanan->tanggal = $request->tanggal;
-        $layanan->narasumber_id = $request->narasumber_id;
-        $layanan->link_survey = $request->link_survey;
-        $layanan->link_absence = $request->link_absence;
+        $layanan->tanggal = $validatedData['tanggal'] ?? null;
+        $layanan->narasumber_id = $validatedData['narasumber_id'] ?? null;
+        $layanan->link_survey = $validatedData['link_survey'] ?? null;
+        $layanan->link_absence = $validatedData['link_absence'] ?? null;
         $layanan->save();
 
         $status = Status::updateOrCreate(
@@ -176,8 +185,26 @@ class LayananController extends Controller
             Fonnte::sendWA($pendaftar->phone_number, $message);
         }
 
-        return redirect()->route('layanan.permintaan')->with('success', 'Permintaan berhasil diperbarui.');
+        if ($request->status === 'Menunggu Konfirmasi') {
+            return redirect()->route('layanan.edit', $id)
+                             ->with('info', 'Mohon konfirmasi layanan ini.');
+        }
+
+        return redirect()->route('layanan.permintaan')->with('success', 'Permintaan berhasil dikonfirmasi.');
     }
+
+    public function selesai($id)
+    {
+        $status = Status::where('layanan_id', $id)->first();
+
+        if ($status) {
+            $status->update(['status' => 'Selesai']);
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Status tidak ditemukan.'], 404);
+    }
+
 
     public function destroy($id)
     {
@@ -357,7 +384,7 @@ class LayananController extends Controller
         ->whereHas('status', function ($query) {
             $query->where('status', 'Selesai');
         })
-        ->get();
+        ->orderBy('tanggal', 'desc')->get();
 
         return view('pendaftar.riwayat', compact('layanan'));
     }

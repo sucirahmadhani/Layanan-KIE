@@ -50,17 +50,18 @@
         {{-- Ganti Password --}}
         <form id="password-form" action="{{ route('profil.password') }}" method="POST" class="space-y-3 hidden">
             @csrf
-            <div>
+            <div class="relative">
                 <label class="block text-sm font-medium mb-1">Password Lama</label>
-                <input type="password" name="old_password"
-                    class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <input type="password" name="old_password" id="old_password" class="form-control border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"/>
+                <i class="fas fa-eye absolute top-10 right-3 cursor-pointer" id="toggleOldPassword"></i>
             </div>
 
-            <div>
+            <div class="relative">
                 <label class="block text-sm font-medium mb-1">Password Baru</label>
-                <input type="password" name="new_password"
-                    class="w-full px-4 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <input type="password" name="new_password" id="new_password" class="form-control border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"/>
+                <i class="fas fa-eye absolute top-10 right-3 cursor-pointer" id="toggleNewPassword"></i>
             </div>
+
             <div class="text-right pt-4">
                 <button type="submit"
                     class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-md">
@@ -112,6 +113,32 @@
             editTab.classList.remove('text-green-600');
         }
     }
+
+    document.getElementById("toggleOldPassword").addEventListener("click", function () {
+        const input = document.getElementById("old_password");
+        const type = input.getAttribute("type") === "password" ? "text" : "password";
+        input.setAttribute("type", type);
+        if (this.classList.contains("fa-eye")) {
+            this.classList.remove("fa-eye");
+            this.classList.add("fa-eye-slash");
+        } else {
+            this.classList.remove("fa-eye-slash");
+            this.classList.add("fa-eye");
+        }
+    });
+
+    document.getElementById("toggleNewPassword").addEventListener("click", function () {
+        const input = document.getElementById("new_password");
+        const type = input.getAttribute("type") === "password" ? "text" : "password";
+        input.setAttribute("type", type);
+        if (this.classList.contains("fa-eye")) {
+            this.classList.remove("fa-eye");
+            this.classList.add("fa-eye-slash");
+        } else {
+            this.classList.remove("fa-eye-slash");
+            this.classList.add("fa-eye");
+        }
+    });
 
     setTimeout(() => {
         document.getElementById('toast-success')?.remove();

@@ -64,23 +64,23 @@
 
     h1 {
       font-size: 50px;
-      margin: 10px 0;
+      margin: 10px 0 0 0;
       color: #1c355e;
       font-weight: bold;
     }
 
     h2 {
-      font-size: 30px;
-      margin: 5px 0 10px 0;
+      font-size: 20px;
+      margin: 15px 0 0 0;
       color: #1c355e;
-      font-weight: 100;
+      font-weight: 50;
     }
 
     .name {
       font-family: 'Great Vibes', cursive;
       font-size: 60px;
       color: goldenrod;
-      margin-top: 7px;
+      margin-top: 0px;
       margin-bottom: 10px;
     }
 
@@ -101,11 +101,21 @@
     }
 
     .signature {
-      margin-top: 60px;
+      margin-top: 40px;
       text-align: right;
-      font-size: 28px;
-      padding-right: 40px;
+      padding-right: 80px;
     }
+
+    .signature-text {
+      font-size: 16px;
+      line-height: 0.9;
+    }
+    .signature-img {
+      height: 100px;
+      object-fit: contain;
+      margin-bottom: -20px;
+    }
+
   </style>
 </head>
 <body>
@@ -114,8 +124,8 @@
       <img src="{{ public_path('img/logo.png') }}" alt="Logo BPOM">
     </div>
     <h1>SERTIFIKAT</h1>
-    <h2>PENGHARGAAN</h2>
-    <p>Diberikan kepada:</p>
+    <p>001/KIE/BBPOM/2024</p>
+    <h2>Diberikan kepada:</h2>
     <div class="name">{{ $pengguna->nama }}</div>
     <p>Sebagai:</p>
     <div class="role">PESERTA</div>
@@ -128,9 +138,20 @@
       pada {{ \Carbon\Carbon::parse($layanan->tanggal)->translatedFormat('d F Y') }}.
     </p>
     <div class="signature">
-      <p><strong>DRA. HILDA MURNI, APT., M.M.</strong><br />
-      Ketua Panitia Pelaksana Tugas<br />
-      Kepala Balai Besar POM di Padang</p>
+       <table style="float: right; text-align: center;">
+            <tr>
+            <td>
+                <img src="{{ public_path('img/sign.jpg') }}" alt="Tanda Tangan Ketua" class="signature-img" />
+            </td>
+            </tr>
+            <tr>
+            <td class="signature-text justify-start">
+                <strong>DRA. HILDA MURNI, APT., M.M.</strong><br />
+                Ketua Panitia Pelaksana Tugas<br />
+                Kepala Balai Besar POM di Padang
+            </td>
+            </tr>
+        </table>
     </div>
   </div>
 </body>

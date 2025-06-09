@@ -8,7 +8,8 @@ export default {
         './resources/**/*.blade.php',
         './resources/**/*.js',
         './resources/**/*.vue',
-        './node_modules/@tabler/core/dist/js/**/*.js', 
+        './node_modules/@tabler/core/dist/js/**/*.js',
+        "./node_modules/flowbite/**/*.js"
     ],
     darkMode: false,
     theme: {
@@ -18,5 +19,7 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [
+        require('flowbite/plugin')
+    ],
 };

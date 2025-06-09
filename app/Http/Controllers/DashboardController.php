@@ -146,8 +146,38 @@ class DashboardController extends Controller
                 'kategoriPeserta' => $kategoriPeserta,
                 'topikPopuler' => $topikPopuler,
             ];
-        }
 
+            if ($jenis->jenis_layanan == 'KIE di BBPOM Padang') {
+                $layananList = Layanan::with(['pengguna' => function ($q) {
+                    $q->withPivot('tes_id');
+                }])->where('jenis_layanan', $jenis->jenis_layanan)->get();
+
+                $tesList = collect();
+
+                foreach ($layananList as $layanan) {
+                    foreach ($layanan->pengguna as $pengguna) {
+                        if ($pengguna->pivot && $pengguna->pivot->tes_id) {
+                            $tes = Tes::find($pengguna->pivot->tes_id);
+                            if ($tes) {
+                                $tesList->push($tes);
+                            }
+                        }
+                    }
+                }
+
+                $avgPretest = $tesList->pluck('skor_pretest')->filter()->avg();
+                $avgPosttest = $tesList->pluck('skor_posttest')->filter()->avg();
+
+                $peningkatan = 0;
+                if ($avgPretest > 0) {
+                    $peningkatan = (($avgPosttest - $avgPretest) / $avgPretest) * 100;
+                }
+
+                $data[$jenis->jenis_layanan]['avgPretest'] = round($avgPretest, 1);
+                $data[$jenis->jenis_layanan]['avgPosttest'] = round($avgPosttest, 1);
+                $data[$jenis->jenis_layanan]['peningkatan'] = round($peningkatan, 1);
+            }
+        }
         return view('layout.dashboard', [
             'jenisLayanan' => $jenisLayanan,
             'data' => $data,

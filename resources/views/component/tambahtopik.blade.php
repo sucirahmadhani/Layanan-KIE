@@ -12,8 +12,8 @@
             <form action="/topik" method="POST">
                 @csrf
                 <div class="mb-4">
-                    <label class="form-label text-white">Judul Topik</label>
-                    <input type="text" name="judul" class="form-control">
+                    <label class="form-label">Judul Topik</label>
+                    <input type="text" name="judul" class="form-control  border-gray-300 rounded-lg">
                 </div>
 
                 <div class="mb-4">
@@ -36,8 +36,8 @@
 <script>
     const selectTahun = document.getElementById('tahun');
     const currentYear = new Date().getFullYear();
-    
-    for (let year = 2024; year <= currentYear; year++) {
+
+    for (let year = 2025; year <= currentYear; year++) {
         let option = document.createElement('option');
         option.value = year;
         option.textContent = year;

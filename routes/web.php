@@ -51,17 +51,25 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/proses', [LayananController::class, 'proses'])->name('proses.show');
     Route::post('/generate-akun', [LayananController::class, 'generateAkun'])->name('generate.akun');
 
+    // Route untuk permintaan layanan
+    Route::get('/permintaan', [LayananController::class, 'permintaan'])->name('layanan.permintaan');
+    Route::get('/permintaan/{layanan_id}', [LayananController::class, 'edit'])->name('layanan.edit');
+    Route::put('/permintaan/{layanan_id}', [LayananController::class, 'update'])->name('layanan.update');
+    Route::delete('/layanan/{layanan_id}', [LayananController::class, 'destroy'])->name('layanan.destroy');
+    Route::post('/layanan/{id}/selesai', [LayananController::class, 'selesai'])->name('layanan.selesai');
+
+    // Route untuk layanan realisasi
+    Route::get('/layanan', [LayananController::class, 'realisasi'])->name('realisasi');
+    Route::get('/layanan/{id}', [LayananController::class, 'realisasi_show'])->name('realisasi.show');
+    Route::get('/layanan/{id}/edit', [LayananController::class, 'realisasi_edit'])->name('realisasi.edit');
+    Route::post('/layanan/{id}', [LayananController::class, 'realisasi_store'])->name('realisasi.store');
+
     // Route untuk narasumber
     Route::get('/narasumber', [NarasumberController::class, 'index'])->name('narasumber.index');
     Route::post('/narasumber', [NarasumberController::class, 'store']);
     Route::delete('/narasumber/{narasumber_id}', [NarasumberController::class, 'destroy'])->name('narasumber.destroy');
     Route::put('/narasumber/{narasumber_id}', [NarasumberController::class, 'update'])->name('narasumber.update');
 
-    // Route untuk permintaan layanan
-    Route::get('/permintaan', [LayananController::class, 'permintaan'])->name('layanan.permintaan');
-    Route::get('/permintaan/{layanan_id}', [LayananController::class, 'edit'])->name('layanan.edit');
-    Route::put('/permintaan/{layanan_id}', [LayananController::class, 'update'])->name('layanan.update');
-    Route::delete('/layanan/{layanan_id}', [LayananController::class, 'destroy'])->name('layanan.destroy');
 
     // Route untuk profil
     Route::get('/profile', [UserController::class, 'edit'])->name('edit.profil');
@@ -71,11 +79,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/akun', [UserController::class, 'profile'])->name('peserta.editProfile');
     Route::post('/akun/update', [UserController::class, 'updateProfile'])->name('peserta.updateProfile');
 
-    // Route untuk layanan realisasi
-    Route::get('/layanan', [LayananController::class, 'realisasi'])->name('realisasi');
-    Route::get('/layanan/{id}', [LayananController::class, 'realisasi_show'])->name('realisasi.show');
-    Route::get('/layanan/{id}/edit', [LayananController::class, 'realisasi_edit'])->name('realisasi.edit');
-    Route::post('/layanan/{id}', [LayananController::class, 'realisasi_store'])->name('realisasi.store');
 
     // Route untuk soal
     Route::get('/topik/{topik}/soal', [TopikController::class, 'soal'])->name('soal.show');
@@ -116,7 +119,12 @@ Route::get('/reset-password/{token}', [LoginController::class, 'showResetPasswor
 Route::post('/reset-password', [LoginController::class, 'resetPassword'])->name('password.update');
 
 
-Route::get('/sertifikat', function () {
-    return view('pdf.sertifikat');
+Route::get('/cek-token', function () {
+    return [
+        'from-env' => env('FONNTE_TOKEN'),
+        'from-config' => config('services.fonnte.token'),
+    ];
 });
+
+
 

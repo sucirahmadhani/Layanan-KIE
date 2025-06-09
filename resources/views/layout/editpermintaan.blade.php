@@ -51,7 +51,6 @@
                                 <option value="Menunggu Konfirmasi" {{ $layanan->status->status == 'Menunggu Konfirmasi' ? 'selected' : '' }}>Menunggu Konfirmasi</option>
                                 <option value="Disetujui" {{ $layanan->status->status == 'Disetujui' ? 'selected' : '' }}>Disetujui</option>
                                 <option value="Ditolak" {{ $layanan->status->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
-                                <option value="Selesai" {{ $layanan->status->status == 'Selesai' ? 'selected' : '' }}>Selesai</option>
                             </select>
                         </div>
                         <div>
@@ -99,13 +98,24 @@
     </div>
 @endif
 
+@if (session('info'))
+    <div id="toast-warning" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="flex items-center w-full max-w-xs p-4 text-yellow-800 bg-yellow-100 rounded-lg shadow">
+            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z"/>
+            </svg>
+            <span class="text-sm font-medium">{{ session('info') }}</span>
+        </div>
+    </div>
+@endif
+
 @if ($errors->any())
     <div id="toast-error" class="fixed inset-0 flex items-center justify-center z-50">
         <div class="flex items-center w-full max-w-xs p-4 text-red-800 bg-red-100 rounded-lg shadow">
             <svg class="w-5 h-5 text-red-600 mr-2" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-width="2" d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <span class="text-sm font-medium">{{ $errors->first() }}</span>
+            <span class="text-sm font-medium"> {{ $errors->first() }}</span>
         </div>
     </div>
 @endif
@@ -114,6 +124,7 @@
     setTimeout(() => {
         document.getElementById('toast-success')?.remove();
         document.getElementById('toast-error')?.remove();
+        document.getElementById('toast-warning')?.remove();
     }, 2000);
 </script>
 

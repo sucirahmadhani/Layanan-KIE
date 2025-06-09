@@ -107,7 +107,7 @@
                         <div class="font-semibold">Foto</div>
                         <div>
                             @if($layanan->realisasi && $layanan->realisasi->foto)
-                                <a href="{{ asset('storage/' . $layanan->realisasi->foto) }}" class="cursor-pointer" target="_blank">{{ $layanan->realisasi->foto }}</a>
+                                <a href="{{ asset('storage/uploads/foto_realisasi/' . $layanan->realisasi->foto) }}" class="cursor-pointer" target="_blank">{{ $layanan->realisasi->foto }}</a>
                             @else
                                 -
                             @endif
@@ -116,7 +116,7 @@
                         <div class="font-semibold">Laporan</div>
                         <div>
                             @if($layanan->realisasi && $layanan->realisasi->laporan)
-                                <a href="{{ asset('storage/' . $layanan->realisasi->laporan) }}" class="cursor-pointer" target="_blank">{{ $layanan->realisasi->laporan }}</a>
+                                <a href="{{ asset('storage/uploads/laporan_realisasi/' . $layanan->realisasi->laporan) }}" class="cursor-pointer" target="_blank">{{ $layanan->realisasi->laporan }}</a>
                             @else
                                 -
                             @endif
@@ -128,7 +128,7 @@
                 </div>
             </div>
             <div class="flex justify-end mt-10">
-                <a href="{{ route('realisasi.edit', $layanan->layanan_id) }}" class="bg-green-400 hover:bg-green-500 text-white font-semibold py-2 px-6 rounded-md">
+                <a href="{{ route('realisasi.edit', $layanan->layanan_id) }}" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-md">
                     Edit
                 </a>
             </div>

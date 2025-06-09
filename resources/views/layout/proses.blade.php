@@ -9,37 +9,43 @@
     </div>
 </header>
 
-<div class="bg-gray-100 flex justify-center items-center h-auto p-5">
+<div class="bg-gray-100 flex justify-center items-start min-h-screen p-5">
     @if($layanan->isEmpty())
-    <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm ">
+    <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">Anda belum mendaftar Layanan KIE BBPOM di Padang</h5>
-        <p class="mb-3 font-normal text-gray-800 ">Silakan mendaftar dengan menekan tombol di bawah ini.</p>
-        <a href="/daftar" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-500 rounded-lg hover:bg-green-600">
+        <p class="mb-3 font-normal text-gray-800">Silakan mendaftar dengan menekan tombol di bawah ini.</p>
+        <a href="/daftar" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-green-500 rounded-lg hover:bg-green-600">
             Daftar
         </a>
     </div>
 
     @else
-    <div class="w-full max-w-10xl mt-0 space-y-3">
+    <div class="w-full max-w-7xl space-y-5">
         @foreach ($layanan as $item)
-        <div class="bg-white rounded-lg p-6 shadow-md mb-6">
-            <h2 class="text-xl font-semibold mb-7 tracking-tight text-green-600"> Kegiatan {{ $item->jenis_layanan }} bersama {{ $item->nama_instansi }}</h2>
-            <div class="grid grid-cols-2 gap-20">
+        <div class="bg-white rounded-lg p-6 shadow-md">
+            <h2 class="text-xl font-semibold mb-7 tracking-tight text-green-600">
+                Kegiatan {{ $item->jenis_layanan }} bersama {{ $item->nama_instansi }}
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="space-y-5">
-                    <div class="block text-blue-800 bg-blue-100 p-4 rounded-lg shadow-sm text-center font-semibold">{{ $item->status->status }}</div>
-                    <div class="text-indigo-800 bg-indigo-100 p-4 rounded-lg shadow-sm grid grid-cols-2 gap-x-2">
+                    <div class="text-blue-800 bg-blue-100 p-4 rounded-lg shadow-sm text-center font-semibold">
+                        {{ $item->status->status }}
+                    </div>
+                    <div class="text-indigo-800 bg-indigo-100 p-4 rounded-lg shadow-sm grid grid-cols-2 gap-x-4">
                         <p class="font-semibold">Tanggal</p>
                         <p>{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') : '-' }}</p>
-                        <p class="font-semibold">Narasumber</p> <p>{{ $item->narasumber->nama_narasumber ?? 'Belum ditentukan' }}</p>
+
+                        <p class="font-semibold">Narasumber</p>
+                        <p>{{ $item->narasumber->nama_narasumber ?? 'Belum ditentukan' }}</p>
                     </div>
-                    <div class="block p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100">
+                    <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:bg-gray-100">
                         <h6 class="mb-2 text-xl font-bold tracking-tight text-gray-900">Catatan</h6>
-                        <p class="font-normal text-gray-800 ">{{ $item->status->catatan ?? 'Belum ada catatan' }}</p>
+                        <p class="font-normal text-gray-800">{{ $item->status->catatan ?? 'Tombol unduh akun untuk akun peserta yang akan mengikuti kegiatan layanan KIE dengan jenis layanan "KIE di BBPOM Padang"' }}</p>
                     </div>
                 </div>
 
-                <div class="space-y-2">
-                    <div class="grid grid-cols-2 gap-y-4">
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-y-4 gap-x-6">
                         <div class="font-semibold">Jenis Layanan</div>
                         <div>{{ $item->jenis_layanan }}</div>
 
@@ -50,9 +56,9 @@
                         <div>{{ $item->nama_instansi }}</div>
 
                         <div class="font-semibold">Topik</div>
-                        <div>
+                        <div class="flex flex-wrap gap-2">
                             @foreach($item->topik as $topik)
-                                <span class="bg-blue-200 text-blue-900 px-2 py-1 rounded-md">{{ $topik->judul }}</span>
+                                <span class="bg-blue-200 text-blue-900 px-2 py-1 rounded-md text-sm">{{ $topik->judul }}</span>
                             @endforeach
                         </div>
 
@@ -73,12 +79,13 @@
 
                         <div class="font-semibold">Surat</div>
                         <div>
-                            <a href="{{ asset('storage/surat_layanan/' . $item->surat) }}" class="cursor-pointer" target="_blank">
+                            <a href="{{ asset('storage/surat_layanan/' . $item->surat) }}" target="_blank" class="underline text-blue-600 hover:text-blue-800">
                                 {{ $item->surat }}
                             </a>
                         </div>
                     </div>
-                    <div class="flex justify-end mt-6 space-x-4">
+
+                    <div class="flex flex-wrap justify-end gap-3 mt-3">
                         @if (
                             $item->status->status == 'Disetujui' &&
                             $item->jenis_layanan == 'KIE di BBPOM Padang'
@@ -132,5 +139,4 @@
         document.getElementById('toast-error')?.remove();
     }, 2000);
 </script>
-
 @endsection

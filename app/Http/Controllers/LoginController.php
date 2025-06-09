@@ -34,36 +34,48 @@ class LoginController extends Controller
 
         $pengguna = Pengguna::where('username', $request->username)->first();
 
-        if ($pengguna && Hash::check($request->password, $pengguna->password)) {
-            Auth::login($pengguna);
+        if (!$pengguna) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['username' => 'Username tidak ditemukan.']);
+        }
 
-            if ($pengguna->role === 'admin') {
-                return redirect()->route('admin.dashboard');
+        if (!Hash::check($request->password, $pengguna->password)) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['password' => 'Password salah.']);
+        }
+
+        Auth::login($pengguna);
+
+        if ($pengguna->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($pengguna->role === 'pendaftar') {
+            if (!$pengguna->email_verified_at) {
+                return redirect()->route('verifikasi-email');
+            }
+            return redirect()->route('pendaftar.dashboard');
+        }
+
+        if ($pengguna->role === 'peserta') {
+            if ($pengguna->expired_at && now()->greaterThan($pengguna->expired_at)) {
+                Auth::logout();
+                return back()->withErrors(['username' => 'Akun Anda sudah expired.']);
             }
 
-            if ($pengguna->role === 'pendaftar') {
-                if (!$pengguna->email_verified_at) {
-                    return redirect()->route('verifikasi-email');
-                }
-                return redirect()->route('pendaftar.dashboard');
-            }
-
-            if ($pengguna->role === 'peserta') {
-                if ($pengguna->expired_at && now()->greaterThan($pengguna->expired_at)) {
-                    Auth::logout();
-                    return back()->withErrors(['username' => 'Akun Anda sudah expired.']);
-                }
-
-                if ($pengguna->profile_updated) {
-                    return redirect()->route('peserta.dashboard');
-                } else {
-                    return redirect()->route('peserta.editProfile');
-                }
+            if ($pengguna->profile_updated) {
+                return redirect()->route('peserta.dashboard');
+            } else {
+                return redirect()->route('peserta.editProfile');
             }
         }
 
-        return redirect()->back()->withErrors(['login' => 'Username atau password salah.']);
+        Auth::logout();
+        return redirect()->back()->withErrors(['login' => 'Terjadi kesalahan login.']);
     }
+
 
     public function register(Request $request)
     {
@@ -132,14 +144,14 @@ class LoginController extends Controller
         }
 
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect('/home');
+            return redirect('/login');
         }
 
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
 
-        return redirect('/home');
+        return redirect('/login');
     }
 
     public function logout()

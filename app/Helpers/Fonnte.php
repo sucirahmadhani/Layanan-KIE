@@ -8,8 +8,10 @@ class Fonnte
 {
     public static function sendWA($target, $message)
     {
-        $response = Http::withHeaders([
-            'Authorization' => env('FONNTE_API_KEY') 
+        $token = config('services.fonnte.token');
+
+        $response = Http::timeout(30)->withHeaders([
+            'Authorization' => $token
         ])->post('https://api.fonnte.com/send', [
             'target' => $target,
             'message' => $message,

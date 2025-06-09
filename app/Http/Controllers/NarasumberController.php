@@ -34,7 +34,7 @@ class NarasumberController extends Controller
             'keahlian' => $request->keahlian,
         ]);
 
-        return redirect()->back();
+        return redirect()->route('narasumber.index')->with('success', 'Narasumber berhasil ditambahkan.');
     }
 
     public function destroy($narasumber_id)
@@ -62,7 +62,7 @@ class NarasumberController extends Controller
         $narasumber->jabatan = $request->jabatan;
         $narasumber->email = $request->email;
         $narasumber->no_hp = $request->no_hp;
-        $narasumber->no_hp = $request->no_hp;
+        $narasumber->keahlian = $request->keahlian;
         $narasumber->save();
 
         return redirect()->route('narasumber.index')->with('success', 'narasumber berhasil diperbarui');

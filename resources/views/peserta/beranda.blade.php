@@ -7,14 +7,14 @@
 <div class="p-8 min-h-screen bg-gray-100">
     <div class="bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-xl font-semibold mb-7 tracking-tight text-green-600"> Kegiatan {{ $layanan->jenis_layanan }} bersama {{ $layanan->nama_instansi }}</h2>
-        <div class="grid grid-cols-2 md:grid-cols-2 gap-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
-                <div class="grid grid-cols-2 gap-x-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
                     <div class="font-semibold">Jenis Layanan</div>
-                    <div>{{ $layanan->jenis_layanan}}</div>
+                    <div class="break-words">{{ $layanan->jenis_layanan}}</div>
 
                     <div class="font-semibold">Nama Organisasi</div>
-                    <div>{{ $layanan->nama_instansi }}</div>
+                    <div class="break-words">{{ $layanan->nama_instansi }}</div>
 
                     <div class="font-semibold">Topik</div>
                     <div>
@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="font-semibold">Tempat</div>
-                    <div>{{ $layanan->tempat }}</div>
+                    <div class="break-words">{{ $layanan->tempat }}</div>
 
                     <div class="font-semibold">Tanggal</div>
                     <div> {{ \Carbon\Carbon::parse($layanan->tanggal)->translatedFormat('d F Y') }}</div>
@@ -46,7 +46,7 @@
             </div>
 
             <div class="flex flex-col  gap-4">
-                <div class="grid grid-cols-2 gap-x-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     @php
                         $labelHariKegiatan = (int) $hariKegiatan >= 0 ? 'D-' . (int) $hariKegiatan : 'D+' . abs((int) $hariKegiatan);
                     @endphp
@@ -98,7 +98,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex justify-end mt-0 items-start space-x-2">
+        <div class="flex justify-end mt-0 items-start space-x-2 flex-wrap gap-2">
             @if ($hariKegiatan >= -1 && $hariKegiatan <= 1 && $layanan->link_absence)
                 <div class="flex justify-end mt-4">
                     <a href="{{ $layanan->link_absence }}"

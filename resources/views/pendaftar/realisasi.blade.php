@@ -38,7 +38,7 @@
                     <td class="px-6 py-4 w-auto space-x-2">
                         <a href="{{ route('realisasi.show', $layanan->layanan_id) }}"
                            class="edit-button text-blue-500 hover:text-blue-700 flex items-center">
-                            <i class="fas fa-pen-to-square"></i>
+                            <i class="fas fa-eye"></i>
                         </a>
 
                         <form action="{{ route('layanan.destroy', $layanan->layanan_id) }}"

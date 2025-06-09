@@ -12,27 +12,27 @@
                     @csrf
                     <div class="mb-4">
                         <label class="form-label ">Nama Narasumber</label>
-                        <input type="text" name="nama" id="nama" class="form-control" required />
+                        <input type="text" name="nama" id="nama" class="form-control border-gray-300 rounded-lg" required />
                     </div>
                     <div class="mb-4">
                         <label class="form-label ">Instansi</label>
-                        <input type="text" name="instansi" id="instansi" class="form-control" required />
+                        <input type="text" name="instansi" id="instansi" class="form-control border-gray-300 rounded-lg" required />
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Jabatan</label>
-                        <input type="text" name="jabatan" id="jabatan" class="form-control" required />
+                        <input type="text" name="jabatan" id="jabatan" class="form-control border-gray-300 rounded-lg" required />
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Email</label>
-                        <input type="text" name="email" id="email" class="form-control" required />
+                        <input type="text" name="email" id="email" class="form-control border-gray-300 rounded-lg" required />
                     </div>
                     <div class="mb-4">
                         <label class="form-label">No HP</label>
-                        <input type="text" name="no_hp" id="nohp" class="form-control" required />
+                        <input type="text" name="no_hp" id="nohp" class="form-control border-gray-300 rounded-lg" required />
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Keahlian</label>
-                        <input type="text" name="keahlian" id="keahlian" class="form-control" required />
+                        <input type="text" name="keahlian" id="keahlian" class="form-control border-gray-300 rounded-lg" required />
                     </div>
                     <div class="flex justify-end">
                         <button type="button" class="px-4 py-2 bg-gray-300 text-white rounded-md mr-2 hover:bg-gray-400" data-modal-hide="addemployee-modal">Batal</button>

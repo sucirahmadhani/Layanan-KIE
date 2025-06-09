@@ -15,27 +15,27 @@
 
                     <div class="mb-4">
                         <label class="form-label">Nama Narasumber</label>
-                        <input type="text" name="nama" id="edit_nama" class="form-control" required />
+                        <input type="text" name="nama" id="edit_nama" class="form-control border-gray-300 rounded-lg" required />
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Instansi</label>
-                        <input type="text" name="instansi" id="edit_nip" class="form-control" required />
+                        <input type="text" name="instansi" id="edit_nip" class="form-control border-gray-300 rounded-lg" required />
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Jabatan</label>
-                        <input type="text" name="jabatan" id="edit_jabatan" class="form-control" required />
+                        <input type="text" name="jabatan" id="edit_jabatan" class="form-control border-gray-300 rounded-lg" required />
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Email</label>
-                        <input type="text" name="email" id="edit_email" class="form-control" required />
+                        <input type="text" name="email" id="edit_email" class="form-control border-gray-300 rounded-lg" required />
                     </div>
                     <div class="mb-4">
                         <label class="form-label">No HP</label>
-                        <input type="text" name="no_hp" id="edit_nohp" class="form-control" required />
+                        <input type="text" name="no_hp" id="edit_nohp" class="form-control border-gray-300 rounded-lg" required />
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Keahlian</label>
-                        <input type="text" name="keahlian" id="edit_keahlian" class="form-control" required />
+                        <input type="text" name="keahlian" id="edit_keahlian" class="form-control border-gray-300 rounded-lg" required />
                     </div>
                     <div class="flex justify-end">
                         <button type="button" class="px-4 py-2 bg-gray-300 text-white rounded-md mr-2 hover:bg-gray-400" data-modal-hide="editemployee-modal">Batal</button>
@@ -60,8 +60,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             document.getElementById("employee_id").value = id;
             document.getElementById("edit_nama").value = this.getAttribute("data-nama");
-            document.getElementById("edit_nip").value = this.getAttribute("data-nip");
+            document.getElementById("edit_nip").value = this.getAttribute("data-instansi");
             document.getElementById("edit_jabatan").value = this.getAttribute("data-jabatan");
+            document.getElementById("edit_email").value = this.getAttribute("data-email");
+            document.getElementById("edit_nohp").value = this.getAttribute("data-nohp");
+            document.getElementById("edit_keahlian").value = this.getAttribute("data-keahlian");
 
             document.querySelector("#editemployee-modal form").action = "/narasumber/" + id;
         });
